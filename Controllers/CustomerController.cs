@@ -17,8 +17,8 @@ public class CustomerController : ControllerBase
     [HttpPost("create")]
     public IActionResult CreateCustomer([FromBody] Customer _customer)
     {
-        
-        var customer = this._DBContext.Customers.FirstOrDefault(p => p.Id == _customer.Id);
+        //Find by name let's say it's unique
+        var customer = this._DBContext.Customers.FirstOrDefault(p => p.Name == _customer.Name);
         if(customer != null) {
             // Already Exists
             return BadRequest("Customer already exists");
@@ -34,7 +34,6 @@ public class CustomerController : ControllerBase
     {
         var customer = this._DBContext.Customers.FirstOrDefault(p => p.Id == _customer.Id);
         if(customer != null) {
-            // Already Exists
             customer.Name = _customer.Name;
             customer.Email = _customer.Email;
             customer.Phone = _customer.Phone;
@@ -52,6 +51,7 @@ public class CustomerController : ControllerBase
         var customer = this._DBContext.Customers.FirstOrDefault(p => p.Id == id);
         if(customer != null) {
             this._DBContext.Remove(customer);
+            this._DBContext.SaveChanges();
             return Ok(true);
         }
         return Ok(false);

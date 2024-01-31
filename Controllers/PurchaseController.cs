@@ -19,11 +19,10 @@ public class PurchaseController : ControllerBase
     {
         foreach (Purchase p in _purchases)
         {
-            var purchase = this._DBContext.Purchases.FirstOrDefault(pTable => pTable.Id == p.Id);
-            if (purchase != null)
+            var productExists = this._DBContext.Products.FirstOrDefault(pTable => pTable.Id == p.ProductId);
+            if (productExists == null)
             {
-                // Already Exists
-                return BadRequest("At least one purchase already exists");
+                return BadRequest("At least one product given doesn't exist");
             }
             else
             {
